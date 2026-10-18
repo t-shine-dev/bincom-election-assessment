@@ -1,0 +1,84 @@
+{% extends 'election/base.html' %}
+
+{% block title %}Add Polling Unit{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">Add New Polling Unit &amp; Results</h2>
+
+{% if errors %}
+<div class="alert alert-danger">
+    <strong>Please fix the following:</strong>
+    <ul class="mb-0">
+        {% for e in errors %}<li>{{ e }}</li>{% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<form method="post" class="card">
+    {% csrf_token %}
+    <div class="card-body">
+        <h5 class="mb-3">Polling Unit Details</h5>
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <label class="form-label fw-semibold" for="lga_id">LGA *</label>
+                <select name="lga_id" id="lga_id" class="form-select" required>
+                    <option value="">-- Choose LGA --</option>
+                    {% for lga in lgas %}
+                        <option value="{{ lga.lga_id }}"
+                            {% if form.lga_id == lga.lga_id|stringformat:"s" %}selected{% endif %}>
+                            {{ lga.lga_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold" for="ward_id">Ward ID *</label>
+                <input type="number" min="0" name="ward_id" id="ward_id" class="form-control"
+                       value="{{ form.ward_id }}" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold" for="polling_unit_name">Polling Unit Name *</label>
+                <input type="text" maxlength="50" name="polling_unit_name" id="polling_unit_name"
+                       class="form-control" value="{{ form.polling_unit_name }}" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold" for="polling_unit_number">Polling Unit Number</label>
+                <input type="text" maxlength="50" name="polling_unit_number" id="polling_unit_number"
+                       class="form-control" value="{{ form.polling_unit_number }}">
+            </div>
+            <div class="col-12">
+                <label class="form-label fw-semibold" for="polling_unit_description">Description</label>
+                <textarea name="polling_unit_description" id="polling_unit_description" rows="2"
+                          class="form-control">{{ form.polling_unit_description }}</textarea>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold" for="lat">Latitude</label>
+                <input type="text" name="lat" id="lat" class="form-control" value="{{ form.lat }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold" for="longitude">Longitude</label>
+                <input type="text" name="longitude" id="longitude" class="form-control" value="{{ form.longitude }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold" for="entered_by_user">Entered By *</label>
+                <input type="text" maxlength="50" name="entered_by_user" id="entered_by_user"
+                       class="form-control" value="{{ form.entered_by_user }}" required>
+            </div>
+        </div>
+
+        <h5 class="mb-3">Party Scores</h5>
+        <div class="row g-3">
+            {% for p in party_rows %}
+            <div class="col-6 col-md-4">
+                <label class="form-label fw-semibold" for="score_{{ p.abbr }}">{{ p.abbr }} *</label>
+                <input type="number" min="0" name="score_{{ p.abbr }}" id="score_{{ p.abbr }}"
+                       class="form-control" value="{{ p.value }}" required>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="card-footer bg-white text-end">
+        <button type="submit" class="btn btn-success px-4">Save Polling Unit &amp; Results</button>
+    </div>
+</form>
+{% endblock %}
