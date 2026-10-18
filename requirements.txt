@@ -1,5 +1,6 @@
-Django>=4.2,<6.0
+Django<6.0,>=4.2
 mysqlclient>=2.2
+gunicorn>=21.0.0
 # If mysqlclient will not install (common on Windows), use this instead
 # and see README.md for the two extra lines needed in bincom_project/__init__.py:
 # pymysql>=1.1
